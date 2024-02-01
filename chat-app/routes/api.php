@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserAuth\AuthController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\UserChatController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,9 @@ Route::get('/chats/{id}', [ChatController::class, 'show']);
 Route::get('/messages', [MessageController::class, 'index']);
 Route::get('/messages/{id}', [MessageController::class, 'show']);
 
+Route::get('/userchats', [UserChatController::class, 'index']);
+Route::get('/userchats/{id}', [UserChatController::class, 'show']);
+
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -45,7 +49,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::resource('/messages', MessageController::class)
     ->only(['store', 'update', 'destroy']);
 
-
+    Route::resource('/userchats', UserChatController::class)
+    ->only(['store', 'destroy']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
