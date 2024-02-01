@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserAuth\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -22,6 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/users', [UserController::class, 'index']);
 Route::get('/users/{id}', [UserController::class, 'show']);
 
+Route::get('/chats', [ChatController::class, 'index']);
+Route::get('/chats/paginate', [ChatController::class, 'indexPaginate']);
+Route::get('/chats/{id}', [ChatController::class, 'show']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -30,7 +34,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function (Request $request) {
         return auth()->user();
     });
-
+    
+    Route::resource('/chats', ChatController::class)
+    ->only(['store', 'update', 'destroy']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
