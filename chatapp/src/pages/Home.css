@@ -1,0 +1,74 @@
+/* Home.css */
+
+.home-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: linear-gradient(to right, rgb(0,119, 182, 1), rgb(8,24,68,1));
+  }
+  
+  .login-container {
+    display: flex;
+    width: 800px;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .sign-in-section {
+    width: 50%;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .welcome-section {
+    width: 50%;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: white;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .sign-in-section h2, .welcome-section h2 {
+    margin-bottom: 20px;
+  }
+  
+  .options {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+  }
+  
+  .forgot-password {
+    color: #ff4b2b;
+    text-decoration: none;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 20px;
+  }
+  
+  Button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff416c;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #ff4b2b;
+  }
+  

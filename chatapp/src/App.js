@@ -9,24 +9,28 @@ import SignUp from './pages/SignUp';
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Dodato stanje za login
 
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
   
   return (
-     <Router>
-      {isLoggedIn && <Navbar handleLogout={handleLogout} />}  
-      <Routes>
-        <Route path="/home" element={<Home/>} />
-        <Route path="/signup" element={<SignUp />} /> 
-        <Route path="/chat" element={<Chat /> } />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/" element={<Home />} /> 
-      </Routes>
-    </Router>
-  );
-  //Navbar se prikazuje samo ako je korisnik ulogovan
-  //Home je default stranica
+    <Router>
+     {isLoggedIn && <Navbar handleLogout={handleLogout} />}  
+     <Routes>
+       <Route path="/home" element={<Home onLogin={handleLogin} />} />
+       <Route path="/signup" element={<SignUp />} /> 
+       <Route path="/chat" element={isLoggedIn ? <Chat /> : <Home onLogin={handleLogin} />} />
+       <Route path="/contact" element={isLoggedIn ? <Contact /> : <Home onLogin={handleLogin} />} />
+       <Route path="/" element={<Home onLogin={handleLogin} />} /> 
+     </Routes>
+   </Router>
+ );
+ //Navbar se prikazuje samo ako je korisnik ulogovan
+ //Home je default stranica
 };
 
 
