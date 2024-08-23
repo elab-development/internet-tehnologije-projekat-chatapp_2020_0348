@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import './Button.css'; 
 
-const Button =  () => {
+const Button = ({ text, onClick }) => {
   return (
-    <div> Button
-    </div>
-  )
-}
-export default Button
+    <button onClick={onClick} className="button">
+      {text}
+    </button>
+  );
+};
+
+export default Button;
