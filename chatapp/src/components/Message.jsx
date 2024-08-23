@@ -1,11 +1,12 @@
-import React from 'react'
+import React from 'react';
+import './Message.css';
 
-const Message = () => {
+const Message = ({ text, sender }) => {
   return (
-    <div>
-      Message
+    <div className={`message-item ${sender === 'user' ? 'user' : ''}`}>
+      {text}
     </div>
-  )
-}
+  );
+};
 
-export default Message
+export default Message;
