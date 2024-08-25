@@ -20,7 +20,18 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors());
+            $errors = $validator->errors();
+            $customErrors = [];
+    
+            if ($errors->has('email')) {
+                $customErrors['email'] = 'Email is invalid or already taken.';
+            }
+    
+            if ($errors->has('password')) {
+                $customErrors['password'] = 'Password must be at least 8 characters.';
+            }
+    
+            return response()->json(['errors' => $customErrors], 422);
         }
 
         $user = User::create([

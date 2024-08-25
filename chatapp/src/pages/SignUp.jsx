@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import './SignUp.css';
+import axios from 'axios';
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -10,14 +11,46 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleSignup = () => {
-    // Validacija da li su uneti svi podaci
-    if (username && email && password) {
-        navigate('/home');
-      } else {
-        alert('Please fill in all fields.');
+  const handleSignup = async () => {
+    if (!username || !email || !password) {
+      alert('Please fill in all fields.');
+      return;
+    }
+  
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/register', {
+        name: username,
+        email: email,
+        password: password
+      });
+  
+      if (response.data.access_token) {
+        alert('Registration successful!');
+        navigate('/home'); // Navigacija na početnu stranicu ili neku drugu stranicu po uspešnoj registraciji
       }
+    } catch (error) {
+      if (error.response && error.response.status === 422) {
+        const errors = error.response.data.errors;
+        let errorMessage = 'Failed to register. ';
+    
+        if (errors.email) {
+          errorMessage += errors.email; // Specifična poruka za email grešku
+        }
+    
+        if (errors.password) {
+          errorMessage += errors.password; // Specifična poruka za grešku lozinke
+        }
+    
+        alert(errorMessage);
+      } else {
+        alert('An unexpected error occurred. Please try again later.');
+      }
+      console.error('Registration error:', error);
+    }
+      
   };
+  
+  
 
   return (
     <div className="signup-container">
