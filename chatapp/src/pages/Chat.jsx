@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import TextInput from '../components/TextInput';
-import Message from '../components/Message'; 
+import Message from '../components/Message';
 import './Chat.css';
 
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [selectedChat, setSelectedChat] = useState('Sofija Milosevic'); // Početni chat
-
   const [chats, setChats] = useState({
     'Milica Bogdanovic': [{ text: 'Ko ti je Sofija?', sender: 'Milica Bogdanovic' }],
     'Sofija Milosevic': [{ text: 'Eej, sta ima?', sender: 'Sofija Milosevic' }],
     'Lazar Todorovic': [{ text: 'Gdee si!', sender: 'Lazar Todorovic' }],
     'Jovana Jovanovic': [{ text: 'Kada se nalazimo?', sender: 'Jovana Jovanovic' }],
   });
+  const [searchTerm, setSearchTerm] = useState('');
 
   const handleSend = () => {
     if (message.trim()) {
@@ -26,11 +26,25 @@ const Chat = () => {
     setSelectedChat(chatName);
   };
 
+  const handleSearch = () => {
+    // Logika za pretragu korisnika
+    console.log("Search for:", searchTerm);
+  };
+
   return (
     <div className="chat-wrapper">
       <div className="chat-container">
         <div className="sidebar">
           <h2>Chats</h2>
+          <div className="search-container">
+            <TextInput
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search users..."
+              className="search-input"
+            />
+            <button onClick={handleSearch} className="search-button">🔍</button>
+          </div>
           <div className="chat-list">
             {Object.keys(chats).map((chatName) => (
               <div

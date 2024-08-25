@@ -148,3 +148,35 @@
   background-color: #383b52;
   font-weight: bold;
 }
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2b2e44;
+  color: white;
+}
+
+.search-button {
+  
+  padding: 10px 15px;
+  margin-left: 10px;
+  background-color: #9a0000;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #434190;
+}
+
