@@ -126,4 +126,17 @@ class UserChatController extends Controller
         $userChat->delete();
         return response()->json('UserChat removed');
     }
+
+    //novo
+    public function getUserChats()
+    {
+        $user = auth()->user(); // Dohvata trenutno autentifikovanog korisnika
+
+        // Pretpostavljamo da koristiš relacije za dohvatanje četova
+        $chats = $user->chats()->with('messages')->get(); // 'chats' je relacija definisana u User modelu
+
+        return response()->json([
+            'chats' => $chats
+        ]);
+    }
 }

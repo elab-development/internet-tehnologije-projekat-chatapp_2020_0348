@@ -38,6 +38,11 @@ Route::get('/userchats/{id}', [UserChatController::class, 'show']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+//novo
+Route::middleware('auth:sanctum')->get('/list-users', [UserController::class, 'listUsers']);
+Route::middleware('auth:sanctum')->get('/user-chats', [UserChatController::class, 'getUserChats']);
+Route::post('/start-chat', [ChatController::class, 'startChat'])->middleware('auth:sanctum');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/profile', function (Request $request) {
         return auth()->user();

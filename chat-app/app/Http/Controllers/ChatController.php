@@ -154,4 +154,26 @@ class ChatController extends Controller
         $chat->delete();
         return response()->json('Chat deleted');
     }
+
+    //novo
+    public function startChat(Request $request) {
+        $currentUser = auth()->user(); // Trenutni autentifikovani korisnik
+        $otherUserId = $request->input('user_id'); // ID drugog korisnika
+    
+        // Proverava da li već postoji čet između dva korisnika
+        $chat = Chat::whereHas('userChats', function($q) use ($currentUser, $otherUserId) {
+            $q->whereIn('user_id', [$currentUser->id, $otherUserId]);
+        })->first();
+    
+        // Ako čet ne postoji, kreiraj novi i poveži korisnike
+        if (!$chat) {
+            $chat = Chat::create(['name' => 'New Chat']);
+            $chat->userChats()->createMany([
+                ['user_id' => $currentUser->id],
+                ['user_id' => $otherUserId]
+            ]);
+        }
+    
+        return response()->json(['chat' => $chat], 201);
+    }
 }

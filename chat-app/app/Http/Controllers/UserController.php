@@ -95,4 +95,11 @@ class UserController extends Controller
     {
         //
     }
+
+    //novo
+    public function listUsers()
+{
+    $users = User::all(); // Dohvatanje svih korisnika iz baze
+    return response()->json($users, 200);
+}
 }
