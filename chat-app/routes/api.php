@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->get('/user-id', function (Request $request) {
     return response()->json(['user_id' => $request->user()->id]);
 });
 
+Route::get('/export-chat/{chatId}', [ChatController::class, 'exportChatToPDF']);
 
 
 

@@ -12,6 +12,7 @@ use CSV;
 use App\Models\User;  
 use App\Models\UserChat;
 use App\Models\Message;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class ChatController extends Controller
@@ -208,6 +209,14 @@ public function sendMessage(Request $request)
     $message->save();
 
     return response()->json(['message' => $message], 201);
+}
+
+
+public function exportChatToPDF($chatId)
+{
+    $chat = Chat::with('messages')->findOrFail($chatId);
+    $pdf = PDF::loadView('pdf.chat', ['chat' => $chat]);
+    return $pdf->download('chat-' . $chat->name . '.pdf');
 }
 
 

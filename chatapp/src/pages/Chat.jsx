@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Message from '../components/Message';
-import YouTubeEmbed from '../components/YouTubeEmbed'; // Uvezi YouTubeEmbed komponentu
+import YouTubeEmbed from '../components/YouTubeEmbed';
 import './Chat.css';
 
 const Chat = () => {
@@ -113,8 +113,15 @@ const Chat = () => {
     }
   };
 
-  // Regularni izraz za detekciju YouTube URL-ova
   const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^\s&]+)/;
+
+  const handleExportPDF = async () => {
+    if (!selectedChat) {
+      alert('Select a chat to export');
+      return;
+    }
+    window.open(`http://127.0.0.1:8000/api/export-chat/${selectedChat}`, '_blank');
+  };
 
   return (
     <div className="chat-wrapper">
@@ -129,7 +136,6 @@ const Chat = () => {
                </div>
               ))}
           </div>
-
           <div className="chat-list">
             {chats.length > 0 ? (
               chats.map((chat) => (
@@ -142,24 +148,24 @@ const Chat = () => {
                 </div>
               ))
             ) : (
-              <p>Korisnik nema aktivnih četova.</p>
+              <p>No active chats.</p>
             )}
           </div>
         </div>
         <div className="chat-content">
           <div className="chat-header">
-            <h2>{selectedChat || 'Select a Chat'}</h2>
+            <h2>{selectedChat ? chats.find(chat => chat.id === selectedChat)?.name : 'Select a Chat'}</h2>
+            <button onClick={handleExportPDF} className="export-button">Export as PDF</button>
           </div>
           
           <div className="message-list">
             {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
               chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
                 <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
-                  {/* Provera za YouTube link i ugradnja videa ako postoji */}
                   {msg.text.match(youtubeRegex) ? (
                     <YouTubeEmbed videoId={msg.text.match(youtubeRegex)[1]} />
                   ) : (
-                    <p>{msg.text}</p>  // Prikazivanje teksta poruke
+                    <p>{msg.text}</p>
                   )}
                 </div>
               ))
@@ -183,4 +189,7 @@ const Chat = () => {
   );
 };
 
+
 export default Chat;
+
+
