@@ -57,18 +57,23 @@ const Chat = () => {
 //za kreiranje trajnog ceta izmedju korisnika 
 const handleStartChat = async (userId) => {
   try {
-      const response = await axios.post('http://127.0.0.1:8000/api/start-chat', {
-          user_id: userId
-      }, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
-      if (response.data) {
-          setSelectedChat(response.data.chat.id);
-          setChats(prevChats => ({ ...prevChats, [response.data.chat.id]: [] }));  // Dodavanje novog četa u listu četova
-      }
+    const response = await axios.post('http://127.0.0.1:8000/api/start-chat', {
+      user_id: userId
+    }, {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    });
+    if (response.data && response.data.chat) {
+      const newChatId = response.data.chat.id.toString();
+      const newChats = {
+        ...chats,
+        [newChatId]: { id: newChatId, messages: [] } // Dodaj novi čet sa praznom listom poruka
+      };
+      setChats(newChats);
+      setSelectedChat(newChatId);
+    }
   } catch (error) {
-      console.error('Failed to start chat:', error);
-      alert('Failed to start chat');
+    console.error('Failed to start chat:', error);
+    alert('Failed to start chat');
   }
 };
 

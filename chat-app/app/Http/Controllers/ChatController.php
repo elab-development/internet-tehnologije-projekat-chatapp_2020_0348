@@ -9,6 +9,8 @@ use App\Models\Chat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use CSV;
+use App\Models\User;  
+use App\Models\UserChat;
 
 class ChatController extends Controller
 {
@@ -155,25 +157,36 @@ class ChatController extends Controller
         return response()->json('Chat deleted');
     }
 
-    //novo
-    public function startChat(Request $request) {
-        $currentUser = auth()->user(); // Trenutni autentifikovani korisnik
-        $otherUserId = $request->input('user_id'); // ID drugog korisnika
-    
-        // Proverava da li već postoji čet između dva korisnika
-        $chat = Chat::whereHas('userChats', function($q) use ($currentUser, $otherUserId) {
-            $q->whereIn('user_id', [$currentUser->id, $otherUserId]);
-        })->first();
-    
-        // Ako čet ne postoji, kreiraj novi i poveži korisnike
-        if (!$chat) {
-            $chat = Chat::create(['name' => 'New Chat']);
-            $chat->userChats()->createMany([
-                ['user_id' => $currentUser->id],
-                ['user_id' => $otherUserId]
-            ]);
-        }
-    
-        return response()->json(['chat' => $chat], 201);
+   //novo
+   public function startChat(Request $request) {
+    $currentUser = auth()->user();
+    $otherUserId = $request->input('user_id');
+    $otherUser = User::find($otherUserId);
+
+    if (!$otherUser) {
+        return response()->json(['error' => 'Other user not found'], 404);
     }
+
+    // Kreiranje novog četa
+    $chat = Chat::create([
+        'name' => 'Chat between ' . $currentUser->name . ' and ' . $otherUser->name,
+        'description' => 'Private chat'
+    ]);
+
+    // Provera postojanja i upisivanje ulogovanog korisnika u novokreirani čet
+    $userChatCurrentUser = new UserChat([
+        'user_id' => $currentUser->id,
+        'chat_id' => $chat->id
+    ]);
+    $userChatCurrentUser->save();
+
+    // Provera postojanja i upisivanje drugog korisnika u čet
+    $userChatOtherUser = new UserChat([
+        'user_id' => $otherUser->id,  // Ovde koristimo $otherUser->id jer smo već proverili da $otherUser postoji
+        'chat_id' => $chat->id
+    ]);
+    $userChatOtherUser->save();
+
+    return response()->json(['chat' => $chat], 201);
+}
 }
