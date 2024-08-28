@@ -56,4 +56,15 @@ class User extends Authenticatable
         
         return $this->belongsToMany(Chat::class, 'user_chats');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+    public function hasRole($roleName)
+{
+    return $this->roles()->where('name', $roleName)->exists();
+}
+
 }

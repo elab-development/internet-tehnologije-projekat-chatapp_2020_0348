@@ -8,7 +8,12 @@ use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\UserChat;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,15 +21,41 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
-        User::truncate();
-        Chat::truncate();
-        UserChat::truncate();
+    {   
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
         Message::truncate();
+        UserChat::truncate();
+        Chat::truncate();
+        User::truncate();
+        Role::truncate();
+
+
+        $adminRole = Role::firstOrCreate(['name' => 'Administrator']);
+        $userRole = Role::firstOrCreate(['name' => 'User']);
+        $modRole = Role::firstOrCreate(['name' => 'Moderator']);
+
+
+        // Kreiranje administratora
+        $admin = User::firstOrCreate([
+            'email' => 'admin@example.com'
+        ], [
+            'name' => 'Admin',
+            'password' => Hash::make('admin123')
+        ]);
+    
+        // Dodeljivanje uloge Administrator
+        $admin->roles()->sync([$adminRole->id]);
+    
 
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
         $user3 = User::factory()->create();
+        $user1->roles()->attach($userRole);
+        $user2->roles()->attach($userRole);
+        $user3->roles()->attach($userRole);
+
 
         $chat1 = Chat::factory()->create();
         $chat2 = Chat::factory()->create();
@@ -120,5 +151,9 @@ class DatabaseSeeder extends Seeder
             'user_id' => $user3->id,
             'chat_id' => $chat4->id,
         ]);
+
+       
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
 }
