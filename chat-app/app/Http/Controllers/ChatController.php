@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use CSV;
 use App\Models\User;  
 use App\Models\UserChat;
+use App\Models\Message;
+
 
 class ChatController extends Controller
 {
@@ -189,4 +191,25 @@ class ChatController extends Controller
 
     return response()->json(['chat' => $chat], 201);
 }
+
+public function sendMessage(Request $request)
+{
+    $request->validate([
+        'text' => 'required|string',
+        'chat_id' => 'required|integer|exists:chats,id',
+    ]);
+
+    $message = new Message([
+        'text' => $request->text,
+        'user_id' => auth()->id(),
+        'chat_id' => $request->chat_id,
+    ]);
+
+    $message->save();
+
+    return response()->json(['message' => $message], 201);
 }
+
+
+}
+

@@ -8,6 +8,8 @@ const Chat = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [chats, setChats] = useState({});
   const [searchResults, setSearchResults] = useState([]);
+  const [userId, setUserId] = useState(null);
+
 
   useEffect(() => {
     fetchChats();
@@ -18,9 +20,9 @@ const Chat = () => {
       const response = await axios.get('http://127.0.0.1:8000/api/user-chats', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
       });
-      setChats(response.data || {});
-      if (response.data && Object.keys(response.data).length > 0) {
-        setSelectedChat(Object.keys(response.data)[0]);
+      setChats(response.data.chats || []);
+      if (response.data.chats && response.data.chats.length > 0) {
+        setSelectedChat(response.data.chats[0].id);
       } else {
         setSelectedChat(null);
       }
@@ -29,17 +31,36 @@ const Chat = () => {
     }
   };
 
-  const handleSend = () => {
-    if (message.trim()) {
-      const updatedMessages = [...(chats[selectedChat] || []), { text: message, sender: 'user' }];
-      setChats({ ...chats, [selectedChat]: updatedMessages });
-      setMessage('');
+  const handleSend = async () => {
+    if (message.trim() && selectedChat) {
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/send-message', {
+          text: message,
+          chat_id: selectedChat,
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        });
+
+        if (response.data && response.data.message) {
+          const newChats = chats.map(chat => {
+            if (chat.id === selectedChat) {
+              return { ...chat, messages: [...chat.messages, response.data.message] };
+            }
+            return chat;
+          });
+          setChats(newChats);
+          setMessage('');
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+        alert('Failed to send message');
+      }
     }
   };
 
-  const handleChatSelection = (chatName) => {
-    setSelectedChat(chatName);
-    setSearchResults([]);  // Clear search results when selecting a chat
+  const handleChatSelection = (chatId) => {
+    setSelectedChat(chatId);
+    setSearchResults([]);
   };
 
   const handleShowUsers = async () => {
@@ -93,14 +114,14 @@ const handleStartChat = async (userId) => {
           </div>
 
           <div className="chat-list">
-            {Object.keys(chats).length > 0 ? (
-              Object.keys(chats).map((chatName) => (
+            {chats.length > 0 ? (
+              chats.map((chat) => (
                 <div
-                  key={chatName}
-                  className={`chat-item ${selectedChat === chatName ? 'active' : ''}`}
-                  onClick={() => handleChatSelection(chatName)}
+                  key={chat.id}
+                  className={`chat-item ${selectedChat === chat.id ? 'active' : ''}`}
+                  onClick={() => handleChatSelection(chat.id)}
                 >
-                  {chatName}
+                  {chat.name || 'Chat without name'}
                 </div>
               ))
             ) : (
@@ -113,9 +134,15 @@ const handleStartChat = async (userId) => {
             <h2>{selectedChat || 'Select a Chat'}</h2>
           </div>
           <div className="message-list">
-            {selectedChat && chats[selectedChat] ? chats[selectedChat].map((msg, index) => (
-              <Message key={index} text={msg.text} sender={msg.sender} />
-            )) : <p>No messages in this chat.</p>}
+            {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
+              chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
+                <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
+                  <div className="message-content">
+                    <Message text={msg.text} sender={msg.sender} />
+                  </div>
+                </div>
+              ))
+            ) : <p>No messages in this chat.</p>}
           </div>
           <div className="message-input-container">
             <input
