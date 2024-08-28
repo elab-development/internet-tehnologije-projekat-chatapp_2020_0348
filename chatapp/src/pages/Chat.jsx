@@ -6,7 +6,7 @@ import './Chat.css';
 const Chat = () => {
   const [message, setMessage] = useState('');
   const [selectedChat, setSelectedChat] = useState(null);
-  const [chats, setChats] = useState({});
+  const [chats, setChats] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [userId, setUserId] = useState(null);
 
@@ -85,11 +85,10 @@ const handleStartChat = async (userId) => {
     });
     if (response.data && response.data.chat) {
       const newChatId = response.data.chat.id.toString();
-      const newChats = {
-        ...chats,
-        [newChatId]: { id: newChatId, messages: [] } // Dodaj novi čet sa praznom listom poruka
-      };
+      const newChat = { id: newChatId, messages: [] };
+      const newChats = [...chats, newChat];
       setChats(newChats);
+
       setSelectedChat(newChatId);
     }
   } catch (error) {
@@ -133,6 +132,7 @@ const handleStartChat = async (userId) => {
           <div className="chat-header">
             <h2>{selectedChat || 'Select a Chat'}</h2>
           </div>
+          
           <div className="message-list">
             {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
               chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
