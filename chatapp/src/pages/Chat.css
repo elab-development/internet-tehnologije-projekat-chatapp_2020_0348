@@ -1,0 +1,194 @@
+/* Globalni stil za centriranje celog sadržaja */
+.chat-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to right, #76b2fe, #b69efe);
+}
+
+/* Glavni kontejner za chat */
+.chat-container {
+  display: flex;
+  background-color: #1e1e2f;
+  border-radius: 15px;
+  overflow: hidden;
+  width: 80%;
+  max-width: 1200px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  height: 600px;
+}
+
+/* Sidebar sa listom chatova */
+.sidebar {
+  width: 30%;
+  background-color: #252836;
+  padding: 20px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar h2 {
+  margin-bottom: 20px;
+}
+
+.chat-list {
+  margin-top: 10px;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.chat-item {
+  padding: 15px;
+  background-color: #2b2e44;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.chat-item:hover {
+  background-color: #383b52;
+}
+
+.chat-item.active {
+  background-color: #383b52;
+  font-weight: bold;
+}
+
+/* Desna strana sa otvorenim chatom */
+.chat-content {
+  width: 70%;
+  background-color: #1e1e2f;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.chat-header {
+  padding: 10px;
+  background-color: #5a67d8;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  color: #ffffff;
+  text-align: center;
+  font-weight: bold;
+}
+
+.message-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.message-item {
+  padding: 10px 15px; /* Smanjeno odstojanje unutar oblačića */
+  border-radius: 10px;
+  margin-bottom: 10px;
+  color: #ffffff;
+  max-width: 70%;
+  word-wrap: break-word;
+  position: relative;
+  background-color: #2f3640; /* Boja za primljene poruke */
+}
+
+.message-item.sent {
+  align-self: flex-end; /* Poravnava desno poslate poruke */
+  background-color: #2aa338; /* Boja za poslate poruke */
+}
+
+.message-item.received {
+  align-self: flex-start; /* Poravnava levo primljene poruke */
+}
+
+
+
+/* Stilizovanje inputa za poruku i dugmeta */
+.message-input-container {
+  display: grid;
+  grid-template-columns: 1fr auto; 
+  align-items: center;
+  padding: 10px;
+  background-color: #252836;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.message-input {
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2f3640;
+  color: #ffffff;
+  width: 100%;
+  box-sizing: border-box;
+  margin-right: 10px;
+}
+
+.send-button {
+  padding: 10px 20px;
+  background-color: #00cd37;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #007700;
+}
+
+.message-input::placeholder {
+  color: #888;
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background-color: #2b2e44;
+  color: white;
+}
+
+.search-button {
+  padding: 10px 15px;
+  margin-left: 10px;
+  background-color: #9a0000;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.search-button:hover {
+  background-color: #434190;
+}
+
+.search-result {
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #252836;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.search-result:hover {
+  background-color: #e1e1e1;
+  color: #252836;
+}
