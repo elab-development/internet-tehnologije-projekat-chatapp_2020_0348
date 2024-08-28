@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Message from '../components/Message';
+import YouTubeEmbed from '../components/YouTubeEmbed'; // Uvezi YouTubeEmbed komponentu
 import './Chat.css';
 
 const Chat = () => {
@@ -22,13 +23,12 @@ const Chat = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserId(response.data.user_id);
-        fetchChats(); // Poziv fetchChats nakon što je userId postavljen
+        fetchChats();
       } catch (error) {
         console.error('Error fetching user ID:', error);
       }
     };
-    
-    
+
     fetchUserId();
   }, []);
 
@@ -113,6 +113,9 @@ const Chat = () => {
     }
   };
 
+  // Regularni izraz za detekciju YouTube URL-ova
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^\s&]+)/;
+
   return (
     <div className="chat-wrapper">
       <div className="chat-container">
@@ -149,14 +152,19 @@ const Chat = () => {
           </div>
           
           <div className="message-list">
-  {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
-    chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
-      <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
-        {msg.text} {/* Direktno prikazivanje teksta poruke */}
-      </div>
-    ))
-  ) : <p>No messages in this chat.</p>}
-</div>
+            {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
+              chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
+                <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
+                  {/* Provera za YouTube link i ugradnja videa ako postoji */}
+                  {msg.text.match(youtubeRegex) ? (
+                    <YouTubeEmbed videoId={msg.text.match(youtubeRegex)[1]} />
+                  ) : (
+                    <p>{msg.text}</p>  // Prikazivanje teksta poruke
+                  )}
+                </div>
+              ))
+            ) : <p>No messages in this chat.</p>}
+          </div>
 
           <div className="message-input-container">
             <input
