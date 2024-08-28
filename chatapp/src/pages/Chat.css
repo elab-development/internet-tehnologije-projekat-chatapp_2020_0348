@@ -88,24 +88,26 @@
 }
 
 .message-item {
-  padding: 15px;
+  padding: 10px 15px; /* Smanjeno odstojanje unutar oblačića */
   border-radius: 10px;
   margin-bottom: 10px;
   color: #ffffff;
   max-width: 70%;
   word-wrap: break-word;
   position: relative;
+  background-color: #2f3640; /* Boja za primljene poruke */
 }
 
 .message-item.sent {
-  align-self: flex-end;
-  background-color: #2aa338;
+  align-self: flex-end; /* Poravnava desno poslate poruke */
+  background-color: #2aa338; /* Boja za poslate poruke */
 }
 
 .message-item.received {
-  align-self: flex-start;
-  background-color: #2f3640;
+  align-self: flex-start; /* Poravnava levo primljene poruke */
 }
+
+
 
 /* Stilizovanje inputa za poruku i dugmeta */
 .message-input-container {

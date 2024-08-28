@@ -149,16 +149,15 @@ const Chat = () => {
           </div>
           
           <div className="message-list">
-            {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
-              chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
-                <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
-                  <div className="message-content">
-                    <Message text={msg.text} sender={msg.sender} />
-                  </div>
-                </div>
-              ))
-            ) : <p>No messages in this chat.</p>}
-          </div>
+  {selectedChat && chats.find(chat => chat.id === selectedChat)?.messages ? (
+    chats.find(chat => chat.id === selectedChat).messages.map((msg) => (
+      <div key={msg.id} className={`message-item ${msg.user_id === userId ? 'sent' : 'received'}`}>
+        {msg.text} {/* Direktno prikazivanje teksta poruke */}
+      </div>
+    ))
+  ) : <p>No messages in this chat.</p>}
+</div>
+
           <div className="message-input-container">
             <input
               value={message}
