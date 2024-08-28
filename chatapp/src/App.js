@@ -14,8 +14,15 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    // Brisanje tokena i svih relevantnih podataka iz localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');  // Ako koristiš userId u localStorage
+  
+    // Postavljanje bilo kojeg stanja povezanog sa autentifikacijom na false ili prazne vrednosti
+    setIsLoggedIn(false);  // Pretpostavljam da se ovo već radi
+  
   };
+  
   
   return (
     <Router>

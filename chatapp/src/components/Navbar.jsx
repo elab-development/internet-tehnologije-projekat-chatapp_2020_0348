@@ -6,10 +6,11 @@ const Navbar = ({handleLogout}) => {
 
   const navigate=useNavigate();
 
-  const onSingOut = ()=>{
+  const onSingOut = () => {
     handleLogout(); //Poziva handleLogout iz App.js da se setuje isLoggedIn na false
-    navigate('/home'); //Preusmerava na početnu stranu
+    navigate('/home', { replace: true }); //Preusmerava na početnu stranu bez mogućnosti povratka
   }
+  
 
   return (
     <nav className="navbar">

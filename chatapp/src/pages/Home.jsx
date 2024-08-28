@@ -26,6 +26,7 @@ import axios from 'axios';
     
         if (response.data.access_token) {
           // Ako je prijava uspešna
+          localStorage.setItem('token', response.data.access_token); // Sačuvaj token
           onLogin(true); // Postavljanje isLoggedIn na true nakon prijave
           navigate('/chat');
         } else {
