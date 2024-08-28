@@ -52,6 +52,8 @@ Route::get('/export-chat/{chatId}', [ChatController::class, 'exportChatToPDF']);
 Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword']);
 
+Route::delete('/users/{id}', [UserController::class, 'destroy'])->middleware('auth:sanctum');
+
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

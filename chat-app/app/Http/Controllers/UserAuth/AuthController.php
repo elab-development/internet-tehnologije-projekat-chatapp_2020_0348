@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
+use App\Models\Role;
+
 
 
 class AuthController extends Controller
@@ -42,7 +44,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password)
         ]);
 
+        $userRole = Role::where('name', 'User')->first();
+        if (!$userRole) {
+            return response()->json(['error' => 'User role does not exist.'], 500);
+        }
+        $user->roles()->attach($userRole);
+
         $token = $user->createToken('auth_token')->plainTextToken;
+
         return response()->json([
             'data' => $user,
             'access_token' => $token,
@@ -58,12 +67,16 @@ class AuthController extends Controller
 
         $user = User::where('email', $request['email'])->firstOrFail();
 
+
+        $roles = $user->roles()->pluck('name'); 
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'message' => $user->name . ' logged in',
             'access_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            'roles' => $roles
         ]);
     }
 

@@ -91,10 +91,23 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
-    {
-        //
+    public function destroy($id)
+{
+    $user = User::find($id);
+
+    // Opciono: Provera da li je trenutni korisnik administrator
+    if (!auth()->user()->can('delete', $user)) {
+        return response()->json(['message' => 'Unauthorized'], 403);
     }
+
+    if ($user) {
+        $user->delete();
+        return response()->json(['message' => 'User successfully deleted']);
+    }
+
+    return response()->json(['message' => 'User not found'], 404);
+}
+
 
     //novo
     public function listUsers()

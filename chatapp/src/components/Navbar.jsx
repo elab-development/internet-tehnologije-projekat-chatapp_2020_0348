@@ -11,6 +11,11 @@ const Navbar = ({handleLogout}) => {
     navigate('/home', { replace: true }); //Preusmerava na početnu stranu bez mogućnosti povratka
   }
   
+  const isAdmin = () => {
+    const roles = JSON.parse(localStorage.getItem('roles') || '[]'); // Čita uloge iz localStorage i pretvara ih iz JSON stringa u objekat
+    return roles.includes('Administrator'); // Proverava da li korisnik ima ulogu Administrator
+  };
+  
 
   return (
     <nav className="navbar">
@@ -18,6 +23,7 @@ const Navbar = ({handleLogout}) => {
       <div className="navbar-links">
         <Link to="/chat" className="navbar-link">Chat</Link>
         <Link to="/contact" className="navbar-link">Contact</Link>
+        {isAdmin() && <Link to="/adminDashboard" className="navbar-link">Admin Dashboard</Link>}
         <button onClick={onSingOut} className="navbar-link">Sign Out</button>
       </div>
     </nav>
