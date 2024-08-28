@@ -67,4 +67,10 @@ class User extends Authenticatable
     return $this->roles()->where('name', $roleName)->exists();
 }
 
+public function isModerator()
+{
+    // Provera da li je uloga korisnika 'moderator'
+    return $this->role === 'moderator';
+}
+
 }

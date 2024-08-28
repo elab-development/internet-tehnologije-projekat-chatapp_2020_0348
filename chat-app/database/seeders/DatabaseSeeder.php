@@ -47,7 +47,16 @@ class DatabaseSeeder extends Seeder
     
         // Dodeljivanje uloge Administrator
         $admin->roles()->sync([$adminRole->id]);
-    
+        
+
+         // Kreiranje moderatora
+    $moderator = User::firstOrCreate([
+        'email' => 'moderator@example.com'
+    ], [
+        'name' => 'Moderator',
+        'password' => Hash::make('mod12345')
+    ]);
+    $moderator->roles()->sync([$modRole->id]);
 
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();

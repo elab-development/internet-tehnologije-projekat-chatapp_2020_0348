@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Message from '../components/Message';
 import YouTubeEmbed from '../components/YouTubeEmbed';
 import './Chat.css';
 
@@ -34,8 +33,13 @@ const Chat = () => {
 
   const fetchChats = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/user-chats', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      const token = localStorage.getItem('token');
+      const roles = JSON.parse(localStorage.getItem('roles'));
+      const isModerator = roles.includes('moderator');
+      const url = isModerator ? 'http://127.0.0.1:8000/api/chats' : 'http://127.0.0.1:8000/api/user-chats';
+  
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       setChats(response.data.chats || []);
       if (response.data.chats && response.data.chats.length > 0) {
@@ -47,6 +51,8 @@ const Chat = () => {
       console.error('Error fetching chats:', error);
     }
   };
+  
+  
 
   const handleSend = async () => {
     if (message.trim() && selectedChat) {
