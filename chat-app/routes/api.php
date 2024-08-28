@@ -43,6 +43,9 @@ Route::middleware('auth:sanctum')->get('/list-users', [UserController::class, 'l
 Route::middleware('auth:sanctum')->get('/user-chats', [UserChatController::class, 'getUserChats']);
 Route::middleware('auth:sanctum')->post('/start-chat', [ChatController::class, 'startChat']);
 Route::post('/send-message', [ChatController::class, 'sendMessage'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->get('/user-id', function (Request $request) {
+    return response()->json(['user_id' => $request->user()->id]);
+});
 
 
 

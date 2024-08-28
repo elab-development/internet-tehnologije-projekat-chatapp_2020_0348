@@ -10,9 +10,26 @@ const Chat = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [userId, setUserId] = useState(null);
 
-
   useEffect(() => {
-    fetchChats();
+    const fetchUserId = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/user-id', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setUserId(response.data.user_id);
+        fetchChats(); // Poziv fetchChats nakon što je userId postavljen
+      } catch (error) {
+        console.error('Error fetching user ID:', error);
+      }
+    };
+    
+    
+    fetchUserId();
   }, []);
 
   const fetchChats = async () => {
@@ -73,30 +90,28 @@ const Chat = () => {
         console.error('Search error:', error);
         alert('Failed to fetch users');
     }
-};
+  };
 
-//za kreiranje trajnog ceta izmedju korisnika 
-const handleStartChat = async (userId) => {
-  try {
-    const response = await axios.post('http://127.0.0.1:8000/api/start-chat', {
-      user_id: userId
-    }, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    });
-    if (response.data && response.data.chat) {
-      const newChatId = response.data.chat.id.toString();
-      const newChat = { id: newChatId, messages: [] };
-      const newChats = [...chats, newChat];
-      setChats(newChats);
+  const handleStartChat = async (userId) => {
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/start-chat', {
+        user_id: userId
+      }, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      if (response.data && response.data.chat) {
+        const newChatId = response.data.chat.id.toString();
+        const newChat = { id: newChatId, messages: [] };
+        const newChats = [...chats, newChat];
+        setChats(newChats);
 
-      setSelectedChat(newChatId);
+        setSelectedChat(newChatId);
+      }
+    } catch (error) {
+      console.error('Failed to start chat:', error);
+      alert('Failed to start chat');
     }
-  } catch (error) {
-    console.error('Failed to start chat:', error);
-    alert('Failed to start chat');
-  }
-};
-
+  };
 
   return (
     <div className="chat-wrapper">

@@ -16,7 +16,7 @@
   width: 80%;
   max-width: 1200px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  height: 600px; /* Povećana visina */
+  height: 600px;
 }
 
 /* Sidebar sa listom chatova */
@@ -52,6 +52,11 @@
   background-color: #383b52;
 }
 
+.chat-item.active {
+  background-color: #383b52;
+  font-weight: bold;
+}
+
 /* Desna strana sa otvorenim chatom */
 .chat-content {
   width: 70%;
@@ -83,7 +88,6 @@
 }
 
 .message-item {
-  background-color: #2f3640;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 10px;
@@ -93,16 +97,15 @@
   position: relative;
 }
 
-.message-item.user {
+.message-item.sent {
   align-self: flex-end;
   background-color: #2aa338;
 }
 
-.message-item:not(.user) {
+.message-item.received {
   align-self: flex-start;
   background-color: #2f3640;
 }
-
 
 /* Stilizovanje inputa za poruku i dugmeta */
 .message-input-container {
@@ -116,7 +119,7 @@
 }
 
 .message-input {
-  padding: 15px; 
+  padding: 15px;
   border: none;
   border-radius: 10px;
   background-color: #2f3640;
@@ -127,14 +130,13 @@
 }
 
 .send-button {
-  padding: 10px 20px; 
+  padding: 10px 20px;
   background-color: #00cd37;
   color: #ffffff;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
-  text-align: center;
 }
 
 .send-button:hover {
@@ -143,11 +145,6 @@
 
 .message-input::placeholder {
   color: #888;
-}
-
-.chat-item.active {
-  background-color: #383b52;
-  font-weight: bold;
 }
 
 .search-container {
@@ -167,7 +164,6 @@
 }
 
 .search-button {
-  
   padding: 10px 15px;
   margin-left: 10px;
   background-color: #9a0000;
@@ -194,4 +190,3 @@
   background-color: #e1e1e1;
   color: #252836;
 }
-
