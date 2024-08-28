@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import TextInput from '../components/TextInput';
 import './Home.css'; 
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -68,7 +69,7 @@ import axios from 'axios';
             <label>
               <input type="checkbox" /> Remember Me
             </label>
-            <a href="/forgot-password" className="forgot-password">Forgot Password</a>
+            <Link to="/forgot-password" className='forgot-password'>Forgot Password?</Link>
           </div>
           {error && <p className="error-message">{error}</p>}
           <Button text="Sign In" onClick={handleLogin} />

@@ -49,6 +49,9 @@ Route::middleware('auth:sanctum')->get('/user-id', function (Request $request) {
 
 Route::get('/export-chat/{chatId}', [ChatController::class, 'exportChatToPDF']);
 
+Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

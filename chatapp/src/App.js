@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Chat from './pages/Chat';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp'; 
+import ForgotPassword from './pages/ForgotPassword';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Dodato stanje za login
@@ -30,6 +31,7 @@ const App = () => {
      <Routes>
        <Route path="/home" element={<Home onLogin={handleLogin} />} />
        <Route path="/signup" element={<SignUp />} /> 
+       <Route path="/forgot-password" element={<ForgotPassword/>} />
        <Route path="/chat" element={isLoggedIn ? <Chat /> : <Home onLogin={handleLogin} />} />
        <Route path="/contact" element={isLoggedIn ? <Contact /> : <Home onLogin={handleLogin} />} />
        <Route path="/" element={<Home onLogin={handleLogin} />} /> 
