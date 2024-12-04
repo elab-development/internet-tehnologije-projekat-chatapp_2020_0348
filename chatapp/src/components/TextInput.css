@@ -1,0 +1,23 @@
+.text-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .text-input-container label {
+    font-weight: bold;
+  }
+  
+  .text-input-container input,
+  .text-input-container textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: auto;
+  }
+  
+  .text-input-container textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
